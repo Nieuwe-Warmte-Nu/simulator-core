@@ -48,6 +48,7 @@ class NetworkSimulation:
         :param Callable[[float, str], None] progress_calback: Callback function to report progress.
         :param int max_number_messages: Maximum number of messages to report progress.
         """
+        self.controller.update_timestep(config.timestep)
         # time loop
         number_of_time_steps = int((config.stop - config.start).total_seconds() / config.timestep)
         logger.info("Number of time steps: " + str(number_of_time_steps))

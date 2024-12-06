@@ -24,6 +24,7 @@ from omotes_simulator_core.entities.assets.asset_defaults import (
     PROPERTY_TEMPERATURE_RETURN,
     PROPERTY_HEAT_DEMAND,
     PROPERTY_SET_PRESSURE,
+    PROPERTY_TIMESTEP,
 )
 from omotes_simulator_core.entities.assets.controller.controller_producer import ControllerProducer
 from omotes_simulator_core.entities.assets.controller.controller_consumer import ControllerConsumer
@@ -191,6 +192,7 @@ class NetworkController(NetworkControllerAbstract):
                 PROPERTY_HEAT_DEMAND: storage.max_discharge_power,
                 PROPERTY_TEMPERATURE_RETURN: storage.temperature_return,
                 PROPERTY_TEMPERATURE_SUPPLY: storage.temperature_supply,
+                PROPERTY_TIMESTEP: self.time_step
             }
         return storages
 
@@ -205,6 +207,7 @@ class NetworkController(NetworkControllerAbstract):
                 PROPERTY_HEAT_DEMAND: storage.max_charge_power,
                 PROPERTY_TEMPERATURE_RETURN: storage.temperature_return,
                 PROPERTY_TEMPERATURE_SUPPLY: storage.temperature_supply,
+                PROPERTY_TIMESTEP: self.time_step
             }
         return storages
 
@@ -219,6 +222,7 @@ class NetworkController(NetworkControllerAbstract):
                 PROPERTY_HEAT_DEMAND: power / len(self.storages),
                 PROPERTY_TEMPERATURE_RETURN: storage.temperature_return,
                 PROPERTY_TEMPERATURE_SUPPLY: storage.temperature_supply,
+                PROPERTY_TIMESTEP: self.time_step
             }
         return storages
 

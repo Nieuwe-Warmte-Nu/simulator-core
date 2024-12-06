@@ -25,6 +25,7 @@ from omotes_simulator_core.entities.assets.asset_defaults import (  # noqa: E402
     PROPERTY_HEAT_DEMAND,
     PROPERTY_TEMPERATURE_RETURN,
     PROPERTY_TEMPERATURE_SUPPLY,
+    PROPERTY_TIMESTEP
 )
 
 
@@ -51,6 +52,7 @@ class AtesClusterTest(unittest.TestCase):
             PROPERTY_HEAT_DEMAND: 1e6,
             PROPERTY_TEMPERATURE_SUPPLY: 353.15,
             PROPERTY_TEMPERATURE_RETURN: 313.15,
+            PROPERTY_TIMESTEP: 3600
         }
 
         # Act
@@ -67,6 +69,7 @@ class AtesClusterTest(unittest.TestCase):
             PROPERTY_HEAT_DEMAND: -1e6,
             PROPERTY_TEMPERATURE_SUPPLY: 353.15,
             PROPERTY_TEMPERATURE_RETURN: 313.15,
+            PROPERTY_TIMESTEP: 3600
         }
 
         # Act

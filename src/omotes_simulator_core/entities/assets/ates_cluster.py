@@ -28,6 +28,7 @@ from omotes_simulator_core.entities.assets.asset_defaults import (
     PROPERTY_PRESSURE_SUPPLY,
     PROPERTY_TEMPERATURE_RETURN,
     PROPERTY_TEMPERATURE_SUPPLY,
+    PROPERTY_TIMESTEP
 )
 from omotes_simulator_core.entities.assets.asset_defaults import ATES_DEFAULTS
 
@@ -80,6 +81,7 @@ class AtesCluster(AssetAbstract):
         self.well_distance = ATES_DEFAULTS.well_distance  # meters
         self.maximum_flow_charge = ATES_DEFAULTS.maximum_flow_charge  # m3/h
         self.maximum_flow_discharge = ATES_DEFAULTS.maximum_flow_discharge  # m3/h
+        self.rosim_timestep = 1
 
         # Output list
         self.output: list = []
@@ -119,6 +121,7 @@ class AtesCluster(AssetAbstract):
             self.thermal_power_allocation = setpoints[PROPERTY_HEAT_DEMAND]
             self.temperature_return = setpoints[PROPERTY_TEMPERATURE_RETURN]
             self.temperature_supply = setpoints[PROPERTY_TEMPERATURE_SUPPLY]
+            self.rosim_timestep = setpoints[PROPERTY_TIMESTEP] / 3600  # convert to 1 hour
 
             self._calculate_massflowrate()
             self._run_rosim()
@@ -254,7 +257,7 @@ class AtesCluster(AssetAbstract):
         """Function to calculate storage temperature after injection and production."""
         volume_flow = self.mass_flowrate * 3600 / 1027  # convert to second and hardcoded saline
         # density needs to change with PVT calculation
-        timestep = 1  # HARDCODED to 1 hour
+        timestep = self.rosim_timestep
 
         rosim_input__flow = [volume_flow, -1 * volume_flow]  # first elemnt is for producer well
         # and second element is for injection well, positive flow is going upward and negative flow

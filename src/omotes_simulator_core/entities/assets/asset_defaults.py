@@ -86,6 +86,7 @@ PROPERTY_LENGTH = "length"
 PROPERTY_DIAMETER = "diameter"
 PROPERTY_ROUGHNESS = "roughness"
 PROPERTY_ALPHA_VALUE = "alpha_value"
+PROPERTY_TIMESTEP = "timestep"
 
 # Static members
 PIPE_DEFAULTS = PipeDefaults()
