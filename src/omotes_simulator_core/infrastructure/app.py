@@ -43,7 +43,7 @@ def run(file_path: str | None = None) -> pd.DataFrame:
         name="test run",
         timestep=3600,
         start=datetime.strptime("2019-01-01T00:00:00", "%Y-%m-%dT%H:%M:%S"),
-        stop=datetime.strptime("2019-01-01T01:00:00", "%Y-%m-%dT%H:%M:%S"),
+        stop=datetime.strptime("2019-01-01T09:00:00", "%Y-%m-%dT%H:%M:%S"),
     )
 
     esdl_file_path = sys.argv[1] if file_path is None else file_path

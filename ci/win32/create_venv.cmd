@@ -3,6 +3,7 @@ rem @echo off
 
 pushd .
 cd /D "%~dp0"
+py -3.11 -m pip install virtualenv
 py -3.11 -m venv ..\..\venv
 call ..\..\venv\Scripts\activate.bat
 python -m pip install pip-tools setuptools wheel

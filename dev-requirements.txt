@@ -42,7 +42,7 @@ coolprop==6.6.0
     # via
     #   -c ..\..\requirements.txt
     #   omotes-simulator-core (..\..\pyproject.toml)
-coverage[toml]==7.6.3
+coverage[toml]==7.6.4
     # via pytest-cov
 dataclass-wizard==0.22.3
     # via
@@ -100,7 +100,7 @@ lxml==5.3.0
     # via
     #   -c ..\..\requirements.txt
     #   pyecore
-markupsafe==3.0.1
+markupsafe==3.0.2
     # via jinja2
 mccabe==0.7.0
     # via flake8
@@ -114,7 +114,7 @@ mypy-extensions==1.0.0
     # via
     #   black
     #   mypy
-numpy==2.1.2
+numpy==2.1.3
     # via
     #   -c ..\..\requirements.txt
     #   geopandas
