@@ -21,9 +21,10 @@ from omotes_simulator_core.entities.assets.asset_defaults import (
     DEFAULT_PRESSURE,
     DEFAULT_TEMPERATURE,
     DEFAULT_TEMPERATURE_DIFFERENCE,
-    PROPERTY_HEAT_DEMAND,
     PROPERTY_TEMPERATURE_RETURN,
     PROPERTY_TEMPERATURE_SUPPLY,
+    PROPERTY_HEAT_DEMAND,
+    PROPERTY_HEAT_DEMAND_SET_POINT,
 )
 from omotes_simulator_core.entities.assets.esdl_asset_object import EsdlAssetObject
 from omotes_simulator_core.entities.assets.utils import (
@@ -50,9 +51,8 @@ class DemandCluster(AssetAbstract):
         self.temperature_return_target = self.temperature_return
         self.pressure_input = DEFAULT_PRESSURE
         self.thermal_power_allocation = DEFAULT_POWER
-        self.mass_flowrate = 0
+        self.mass_flowrate = 0.0
         self.solver_asset = ProductionAsset(name=self.name, _id=self.asset_id)
-        # Output list
         self.output: list = []
 
     def set_setpoints(self, setpoints: dict) -> None:
@@ -92,9 +92,22 @@ class DemandCluster(AssetAbstract):
         """
 
     def write_to_output(self) -> None:
-        """Placeholder to write the asset to the output.
+        """Method to write time step results to the output dict.
 
         The output list is a list of dictionaries, where each dictionary
-        represents the output of its asset for a specific timestep.
+        represents the output of the asset for a specific timestep.
         """
-        pass
+        output_dict_temp = {
+            PROPERTY_HEAT_DEMAND_SET_POINT: -self.thermal_power_allocation,
+            PROPERTY_HEAT_DEMAND: self.get_actual_heat_supplied(),
+        }
+        self.outputs[1][-1].update(output_dict_temp)
+
+    def get_actual_heat_supplied(self) -> float:
+        """Get the actual heat supplied by the asset.
+
+        :return float: The actual heat supplied by the asset [W].
+        """
+        return (
+            self.solver_asset.get_internal_energy(1) - self.solver_asset.get_internal_energy(0)
+        ) * self.solver_asset.get_mass_flow_rate(0)

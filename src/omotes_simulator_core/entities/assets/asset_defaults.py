@@ -70,6 +70,7 @@ class AtesDefaults:
 
 # Default names
 PROPERTY_HEAT_DEMAND = "heat_demand"
+PROPERTY_HEAT_DEMAND_SET_POINT = "heat_demand_set_point"
 PROPERTY_TEMPERATURE_SUPPLY = "temperature_supply"
 PROPERTY_TEMPERATURE_RETURN = "temperature_return"
 PROPERTY_TEMPERATURE = "temperature"
@@ -78,6 +79,7 @@ PROPERTY_PRESSURE_RETURN = "pressure_return"
 PROPERTY_PRESSURE = "pressure"
 PROPERTY_MASSFLOW = "mass_flow"
 PROPERTY_VOLUMEFLOW = "volume_flow"
+PROPERTY_VELOCITY = "velocity"
 PROPERTY_THERMAL_POWER = "thermal_power"
 PROPERTY_VELOCITY_SUPPLY = "velocity_supply"
 PROPERTY_VELOCITY_RETURN = "velocity_return"
@@ -86,6 +88,11 @@ PROPERTY_LENGTH = "length"
 PROPERTY_DIAMETER = "diameter"
 PROPERTY_ROUGHNESS = "roughness"
 PROPERTY_ALPHA_VALUE = "alpha_value"
+PROPERTY_PRESSURE_LOSS = "pressure_loss"
+PROPERTY_PRESSURE_LOSS_PER_LENGTH = "pressure_loss_per_length"
+PROPERTY_HEAT_LOSS = "heat_loss"
+PROPERTY_HEAT_SUPPLIED = "heat_supplied"
+PROPERTY_HEAT_SUPPLY_SET_POINT = "heat_supply_set_point"
 
 # Static members
 PIPE_DEFAULTS = PipeDefaults()

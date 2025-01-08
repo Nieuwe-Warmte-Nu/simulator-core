@@ -344,3 +344,19 @@ class BaseAsset(BaseItem):
                 )
             ]
         )
+
+    def get_internal_energy(self, connection_point: int) -> float:
+        """Method to get the internal energy of a connection point for the last computed time step.
+
+        :param int connection_point: The connection point for which to get the internal energy.
+        :return: The internal energy of the connection point.
+        """
+        return float(
+            self.prev_sol[
+                self.get_index_matrix(
+                    property_name="internal_energy",
+                    connection_point=connection_point,
+                    use_relative_indexing=True,
+                )
+            ]
+        )

@@ -48,4 +48,4 @@ class SimulationManagerTest(unittest.TestCase):
         # Assert
         self.assertIsNotNone(result)
         self.assertTrue(callback.called)
-        self.assertEqual(result.shape, (1, 24))
+        self.assertEqual(result.shape, (1, 46))

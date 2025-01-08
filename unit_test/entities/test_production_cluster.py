@@ -13,7 +13,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-"""Test Junction entities."""
+"""Test production cluster."""
 import unittest
 from unittest.mock import patch
 
@@ -22,11 +22,13 @@ from omotes_simulator_core.entities.assets.asset_defaults import (
     PROPERTY_MASSFLOW,
     PROPERTY_PRESSURE,
     PROPERTY_TEMPERATURE,
+    PROPERTY_VOLUMEFLOW,
     PROPERTY_SET_PRESSURE,
     PROPERTY_TEMPERATURE_RETURN,
     PROPERTY_TEMPERATURE_SUPPLY,
 )
 from omotes_simulator_core.entities.assets.production_cluster import ProductionCluster
+from omotes_simulator_core.solver.utils.fluid_properties import fluid_props
 from omotes_simulator_core.entities.assets.utils import (
     heat_demand_and_temperature_to_mass_flow,
 )
@@ -201,10 +203,12 @@ class ProductionClusterTest(unittest.TestCase):
             patch.object(
                 self.production_cluster.solver_asset, "get_temperature"
             ) as get_temperature,
+            patch.object(self.production_cluster, "get_volume_flow_rate") as get_volume_flow_rate,
         ):
             get_mass_flow_rate.return_value = 1e6
             get_pressure.return_value = 2e5
             get_temperature.return_value = 333.15
+            get_volume_flow_rate.return_value = 100.0
 
             # Act
             self.production_cluster.write_standard_output()
@@ -220,5 +224,57 @@ class ProductionClusterTest(unittest.TestCase):
                 PROPERTY_TEMPERATURE: 333.15,
                 PROPERTY_MASSFLOW: 1e6,
                 PROPERTY_PRESSURE: 2e5,
+                PROPERTY_VOLUMEFLOW: 100.0,
             },
         )
+
+    def test_get_volume_flow_rate(self):
+        """Test getting the volume flow rate of a production cluster."""
+        # Arrange
+        with (
+            patch.object(
+                self.production_cluster.solver_asset,
+                "get_mass_flow_rate",
+            ) as get_mass_flow_rate,
+            patch.object(
+                fluid_props,
+                "get_density",
+            ) as get_density,
+        ):
+            get_mass_flow_rate.return_value = 1000.0
+            get_density.return_value = 1000.0
+
+            # Act
+            volume_flow_rate = self.production_cluster.get_volume_flow_rate(i=0)
+            # Assert
+            self.assertEqual(volume_flow_rate, 1.0)
+
+    def test_get_actual_heat_supplied(self):
+        """Test getting the actual heat supplied by a production cluster."""  # noqa: D202
+
+        # Arrange
+        def get_internal_energy(_, i: int):
+            if i == 0:
+                return 1.0e6
+            if i == 1:
+                return 2.0e6
+
+        def get_mass_flow_rate(_, i: int):
+            return 0.5
+
+        with (
+            patch(
+                "omotes_simulator_core.solver.network.assets.base_asset."
+                "BaseAsset.get_internal_energy",
+                get_internal_energy,
+            ),
+            patch(
+                "omotes_simulator_core.solver.network.assets.base_asset."
+                "BaseAsset.get_mass_flow_rate",
+                get_mass_flow_rate,
+            ),
+        ):
+            # Act
+            actual_heat_supplied = self.production_cluster.get_actual_heat_supplied()
+            # Assert
+            self.assertEqual(actual_heat_supplied, 0.5 * 1e6)

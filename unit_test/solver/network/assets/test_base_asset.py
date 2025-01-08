@@ -308,4 +308,20 @@ class BaseAssetTest(unittest.TestCase):
         result = self.asset.get_temperature(connection_point=connection_point_id)
 
         # Assert
-        self.assertAlmostEqual(result, temperature, 2)
+        self.assertAlmostEquals(result, temperature, 2)
+
+    def test_base_get_internal_energy(self) -> None:
+        """Test the get_internal_energy method."""
+        # Arrange
+        connection_point_id = 0
+        temperature = 300.0
+        self.asset.prev_sol[
+            index_core_quantity.internal_energy
+            + connection_point_id * index_core_quantity.number_core_quantities
+        ] = fluid_props.get_ie(temperature)
+
+        # Act
+        result = self.asset.get_internal_energy(connection_point=connection_point_id)
+
+        # Assert
+        self.assertAlmostEquals(result, 112413.55, 2)

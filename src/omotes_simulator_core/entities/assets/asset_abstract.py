@@ -17,12 +17,15 @@
 
 from abc import ABC, abstractmethod
 from pandas import DataFrame, concat
+
 from omotes_simulator_core.entities.assets.esdl_asset_object import EsdlAssetObject
+from omotes_simulator_core.solver.utils.fluid_properties import fluid_props
 from omotes_simulator_core.solver.network.assets.base_asset import BaseAsset
 from omotes_simulator_core.entities.assets.asset_defaults import (
     PROPERTY_MASSFLOW,
     PROPERTY_PRESSURE,
     PROPERTY_TEMPERATURE,
+    PROPERTY_VOLUMEFLOW,
 )
 
 
@@ -86,25 +89,41 @@ class AssetAbstract(ABC):
         """Placeholder method to add physical data to an asset."""
 
     def write_standard_output(self) -> None:
-        """Write the output of the asset to the output list.
+        """Write the standard time step results of the asset to the output list.
 
-        The output list is a list of dictionaries, where each dictionary
-        represents the output of its asset for a specific timestep.
-        The output of the asset is a list with a dictionary for each port
-        of the asset. Teh basic properties mass flow rate, pressure and temperature are stored.
-        All assets can add their own properties to the dictionary.
+        The output list is a list of list with dictionaries, where each dictionary
+        represents the output of its asset for a specific timestep of a specific port.
+        The basic properties mass flow rate, pressure and temperature are stored.
+        All assets can add their own properties to the dictionary via the write_output method.
         """
         for i in range(len(self.connected_ports)):
             output_dict_temp = {
                 PROPERTY_MASSFLOW: self.solver_asset.get_mass_flow_rate(i),
                 PROPERTY_PRESSURE: self.solver_asset.get_pressure(i),
                 PROPERTY_TEMPERATURE: self.solver_asset.get_temperature(i),
+                PROPERTY_VOLUMEFLOW: self.get_volume_flow_rate(i),
             }
             self.outputs[i].append(output_dict_temp)
 
+    def get_volume_flow_rate(self, i: int) -> float:
+        """Calculates and returns the volume flow rate for the given port.
+
+        The volumetric flow rate is calculated for the specified asset port based on fluid
+        temperature/density and mass flow rate from last computed timestep
+
+        :param int i: The index of the port.
+        :return float: The volume flow rate.
+        """
+        rho = fluid_props.get_density(self.solver_asset.get_temperature(i))
+        return self.solver_asset.get_mass_flow_rate(i) / rho
+
     @abstractmethod
     def write_to_output(self) -> None:
-        """Placeholder to get data and store it in the asset."""
+        """Placeholder to write time step results to the output dict.
+
+        The output list is a list of dictionaries, where each dictionary
+        represents the output of the asset for a specific timestep.
+        """
 
     def get_timeseries(self) -> DataFrame:
         """Get timeseries as a dataframe from a asset.
