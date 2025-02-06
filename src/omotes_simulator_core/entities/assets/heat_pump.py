@@ -20,7 +20,7 @@ from omotes_simulator_core.solver.network.assets.base_asset import BaseAsset
 
 
 class HeatPump(AssetAbstract):
-    """A HeatPump represents an asset that produces heat."""
+    """A HeatPump represents an asset that delivers heat."""
 
     def __init__(self, asset_name: str, asset_id: str, port_ids: list[str]):
         """Initialize a HeatPump object.
