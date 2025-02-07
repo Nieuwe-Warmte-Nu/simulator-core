@@ -68,6 +68,14 @@ class AtesDefaults:
     maximum_flow_discharge: float = 200.0  # m3/h
 
 
+@dataclass
+class HeatBufferDefaults:
+    """Class containing the default values for Heat Buffer."""
+
+    maximum_volume: float = 1  # m3
+    fill_level: float = 0.5  # fraction 0-1
+
+
 # Default names
 PROPERTY_HEAT_DEMAND = "heat_demand"
 PROPERTY_TEMPERATURE_SUPPLY = "temperature_supply"
@@ -86,7 +94,10 @@ PROPERTY_LENGTH = "length"
 PROPERTY_DIAMETER = "diameter"
 PROPERTY_ROUGHNESS = "roughness"
 PROPERTY_ALPHA_VALUE = "alpha_value"
+PROPERTY_VOLUME = "volume"
+PROPERTY_FILL_LEVEL = "fill_level"
 
 # Static members
 PIPE_DEFAULTS = PipeDefaults()
 ATES_DEFAULTS = AtesDefaults()
+HEAT_BUFFER_DEFAULTS = HeatBufferDefaults()
